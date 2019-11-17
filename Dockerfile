@@ -1,7 +1,7 @@
 ################################################################################
 # Set up environment variables, OS packages, and scripts that are common to the
 # build and distribution layers in this Dockerfile
-FROM alpine:3.9 AS base
+FROM alpine:3.10.3 AS base
 
 # Must be one of 'gmp' or 'simple'; used to build GHC with support for either
 # 'integer-gmp' (with 'libgmp') or 'integer-simple'
@@ -72,7 +72,6 @@ RUN echo "Install OS packages necessary to build GHC" &&\
         perl \
         python3 \
         py3-sphinx \
-        zlib-dev
 
 COPY docker/build-gmp.mk /tmp/build-gmp.mk
 COPY docker/build-simple.mk /tmp/build-simple.mk
@@ -100,14 +99,16 @@ RUN echo "Compiling and installing GHC" &&\
 # Intermediate layer that assembles 'stack' tooling
 FROM base AS build-tooling
 
-ENV STACK_VERSION=2.1.3
-ENV STACK_SHA256="4e937a6ad7b5e352c5bd03aef29a753e9c4ca7e8ccc22deb5cd54019a8cf130c  stack-${STACK_VERSION}-linux-x86_64-static.tar.gz"
+ARG STACK_VERSION=2.1.3
+ARG STACK_SHA256=4e937a6ad7b5e352c5bd03aef29a753e9c4ca7e8ccc22deb5cd54019a8cf130c
+
+ENV STACK_CHECKSUM="${STACK_SHA256}  stack-${STACK_VERSION}-linux-x86_64-static.tar.gz"
 
 # Download, verify, and install stack
 RUN echo "Downloading and installing stack" &&\
     cd /tmp &&\
     wget -P /tmp/ "https://github.com/commercialhaskell/stack/releases/download/v${STACK_VERSION}/stack-${STACK_VERSION}-linux-x86_64-static.tar.gz" &&\
-    if ! echo -n "${STACK_SHA256}" | sha256sum -c -; then \
+    if ! echo -n "${STACK_CHECKSUM}" | sha256sum -c -; then \
         echo "stack-${STACK_VERSION} checksum failed" >&2 &&\
         exit 1 ;\
     fi ;\

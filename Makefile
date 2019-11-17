@@ -19,6 +19,9 @@ stack_docker = $(stack) --docker
 
 # GHC version to build
 TARGET_GHC_VERSION ?= 8.6.5
+# Stack version to use
+TARGET_STACK_VERSION ?= 2.1.3
+TARGET_STACK_SHA256 ?= 4e937a6ad7b5e352c5bd03aef29a753e9c4ca7e8ccc22deb5cd54019a8cf130c  stack-${STACK_VERSION}-linux-x86_64-static.tar.gz
 
 ################################################################################
 # Standard build (runs in the Docker container)
@@ -66,6 +69,8 @@ docker-base-gmp:
 	docker build \
 	  --build-arg GHC_BUILD_TYPE=gmp \
 	  --build-arg GHC_VERSION=$(TARGET_GHC_VERSION) \
+	  --build-arg STACK_VERSION=$(TARGET_STACK_VERSION) \
+	  --build-arg STACK_SHA256=$(TARGET_STACK_SHA256) \
 	  --target base \
 	  --tag alpine-haskell-gmp:base \
 	  --cache-from alpine-haskell-gmp:base \
@@ -77,6 +82,8 @@ docker-ghc-gmp:
 	docker build \
 	  --build-arg GHC_BUILD_TYPE=gmp \
 	  --build-arg GHC_VERSION=$(TARGET_GHC_VERSION) \
+	  --build-arg STACK_VERSION=$(TARGET_STACK_VERSION) \
+	  --build-arg STACK_SHA256=$(TARGET_STACK_SHA256) \
 	  --target build-ghc \
 	  --tag alpine-haskell-gmp:build-ghc-$(TARGET_GHC_VERSION) \
 	  --cache-from alpine-haskell-gmp:build-ghc-$(TARGET_GHC_VERSION) \
@@ -89,6 +96,8 @@ docker-tooling-gmp:
 	docker build \
 	  --build-arg GHC_BUILD_TYPE=gmp \
 	  --build-arg GHC_VERSION=$(TARGET_GHC_VERSION) \
+	  --build-arg STACK_VERSION=$(TARGET_STACK_VERSION) \
+	  --build-arg STACK_SHA256=$(TARGET_STACK_SHA256) \
 	  --target build-tooling \
 	  --tag alpine-haskell-gmp:build-tooling \
 	  --cache-from alpine-haskell-gmp:build-tooling\
@@ -102,6 +111,8 @@ docker-image-gmp:
 	docker build \
 	  --build-arg GHC_BUILD_TYPE=gmp \
 	  --build-arg GHC_VERSION=$(TARGET_GHC_VERSION) \
+	  --build-arg STACK_VERSION=$(TARGET_STACK_VERSION) \
+	  --build-arg STACK_SHA256=$(TARGET_STACK_SHA256) \
 	  --tag alpine-haskell-gmp:$(TARGET_GHC_VERSION) \
 	  --cache-from alpine-haskell-gmp:$(TARGET_GHC_VERSION) \
 	  --cache-from alpine-haskell-gmp:build-tooling \
@@ -119,6 +130,8 @@ docker-base-simple:
 	docker build \
 	  --build-arg GHC_BUILD_TYPE=simple \
 	  --build-arg GHC_VERSION=$(TARGET_GHC_VERSION) \
+	  --build-arg STACK_VERSION=$(TARGET_STACK_VERSION) \
+	  --build-arg STACK_SHA256=$(TARGET_STACK_SHA256) \
 	  --target base \
 	  --tag alpine-haskell-simple:base \
 	  --cache-from alpine-haskell-simple:base \
@@ -130,6 +143,8 @@ docker-ghc-simple:
 	docker build \
 	  --build-arg GHC_BUILD_TYPE=simple \
 	  --build-arg GHC_VERSION=$(TARGET_GHC_VERSION) \
+	  --build-arg STACK_VERSION=$(TARGET_STACK_VERSION) \
+	  --build-arg STACK_SHA256=$(TARGET_STACK_SHA256) \
 	  --target build-ghc \
 	  --tag alpine-haskell-simple:build-ghc-$(TARGET_GHC_VERSION) \
 	  --cache-from alpine-haskell-simple:build-ghc-$(TARGET_GHC_VERSION) \
@@ -142,6 +157,8 @@ docker-tooling-simple:
 	docker build \
 	  --build-arg GHC_BUILD_TYPE=simple \
 	  --build-arg GHC_VERSION=$(TARGET_GHC_VERSION) \
+	  --build-arg STACK_VERSION=$(TARGET_STACK_VERSION) \
+	  --build-arg STACK_SHA256=$(TARGET_STACK_SHA256) \
 	  --target build-tooling \
 	  --tag alpine-haskell-simple:build-tooling \
 	  --cache-from alpine-haskell-simple:build-tooling\
@@ -155,6 +172,8 @@ docker-image-simple:
 	docker build \
 	  --build-arg GHC_BUILD_TYPE=simple \
 	  --build-arg GHC_VERSION=$(TARGET_GHC_VERSION) \
+	  --build-arg STACK_VERSION=$(TARGET_STACK_VERSION) \
+	  --build-arg STACK_SHA256=$(TARGET_STACK_SHA256) \
 	  --tag alpine-haskell-simple:$(TARGET_GHC_VERSION) \
 	  --cache-from alpine-haskell-simple:$(TARGET_GHC_VERSION) \
 	  --cache-from alpine-haskell-simple:build-tooling \
